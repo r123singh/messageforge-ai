@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+
+{% block title %}{% if contact %}Edit Contact{% else %}New Contact{% endif %} - WhatsApp Campaign Manager{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto">
+    <div class="bg-white shadow rounded-lg">
+        <div class="px-4 py-5 sm:p-6">
+            <h1 class="text-2xl font-bold text-gray-900 mb-6">
+                {% if contact %}Edit Contact{% else %}Add New Contact{% endif %}
+            </h1>
+            
+            <form action="{{ url_for('main.edit_contact', id=contact.id) if contact else url_for('main.create_contact') }}" method="POST">
+                <div class="space-y-6">
+                    <!-- Name -->
+                    <div>
+                        <label for="name" class="block text-sm font-medium text-gray-700">
+                            Name
+                        </label>
+                        <div class="mt-1">
+                            <input type="text" name="name" id="name" required
+                                   value="{{ contact.name if contact else '' }}"
+                                   class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                                   placeholder="Enter contact name">
+                        </div>
+                    </div>
+
+                    <!-- Phone -->
+                    <div>
+                        <label for="phone" class="block text-sm font-medium text-gray-700">
+                            Phone Number
+                        </label>
+                        <div class="mt-1">
+                            <input type="tel" name="phone" id="phone" required
+                                   value="{{ contact.phone if contact else '' }}"
+                                   class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                                   placeholder="Enter phone number with country code">
+                        </div>
+                        <p class="mt-1 text-sm text-gray-500">Format: +1234567890 (with country code)</p>
+                    </div>
+
+                    <!-- Email -->
+                    <div>
+                        <label for="email" class="block text-sm font-medium text-gray-700">
+                            Email (Optional)
+                        </label>
+                        <div class="mt-1">
+                            <input type="email" name="email" id="email"
+                                   value="{{ contact.email if contact else '' }}"
+                                   class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                                   placeholder="Enter email address">
+                        </div>
+                    </div>
+
+                    <!-- Group -->
+                    <div>
+                        <label for="group_id" class="block text-sm font-medium text-gray-700">
+                            Contact Group
+                        </label>
+                        <div class="mt-1">
+                            <select id="group_id" name="group_id"
+                                    class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                                <option value="">No Group</option>
+                                {% for group in groups %}
+                                <option value="{{ group.id }}" {% if contact and contact.group_id == group.id %}selected{% endif %}>
+                                    {{ group.name }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="pt-5">
+                        <div class="flex justify-end">
+                            <a href="{{ url_for('main.contacts') }}"
+                               class="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                Cancel
+                            </a>
+                            <button type="submit"
+                                    class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                {{ 'Save Changes' if contact else 'Add Contact' }}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Phone number validation
+document.getElementById('phone').addEventListener('input', function(e) {
+    let value = e.target.value.replace(/[^\d+]/g, '');
+    if (!value.startsWith('+')) {
+        value = '+' + value;
+    }
+    e.target.value = value;
+});
+</script>
+{% endblock %} 

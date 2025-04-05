@@ -1,0 +1,2 @@
+A whatsapp campaign based webapp that allows you to send whatsapp messages to a list of contacts. Creating messages using generative AI.
+Integrations with multiple whatsapp business providers like twilio, infobip, etc. A go to market strategy to sell to SMBs. A whatsapp agent to handle the conversations automatically. Deploy the whatsapp conversation agent as a whatsapp cloud api service. Integrates with APIs. Utilizes the openai agent sdk. It should be a beautiful, unique looking website.
